@@ -57,12 +57,10 @@ export default function App() {
   return (
     <>
       <NavBar>
-        {" "}
         <Search />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
-        {" "}
         <Box>
           <MovieList movies={movies} />
         </Box>
