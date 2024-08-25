@@ -55,7 +55,7 @@ const average = (arr) =>
 const KEY = "9f3d1b4b";
 
 export default function App() {
-  const [query, setQuery] = useState("Inception");
+  const [query, setQuery] = useState("");
 
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
@@ -116,7 +116,7 @@ export default function App() {
           setMovies(data.Search);
           setError("");
         } catch (err) {
-          console.error(err.message);
+          // console.error(err.message);
 
           if (err.name !== "AbortError") {
             setError(err.message);
@@ -130,6 +130,8 @@ export default function App() {
         setError("");
         return;
       }
+
+      handleCloseMovie();
 
       fetchMovies();
 
@@ -332,6 +334,24 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
   useEffect(
     function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+          // console.log("CLOSING");
+        }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie]
+  );
+
+  useEffect(
+    function () {
       async function getMovieDetails() {
         setIsLoading(true);
         const res = await fetch(
@@ -354,7 +374,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
       return function () {
         document.title = "usePopcorn";
 
-        console.log(`Clean up effect for movie ${title}`);
+        // console.log(`Clean up effect for movie ${title}`);
       };
     },
 
